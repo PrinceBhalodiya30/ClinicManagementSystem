@@ -1,0 +1,89 @@
+@model List<ClinicManagementSystem.Models.DoctorQueueItem>
+@{
+    ViewData["Title"] = "Doctor's Dashboard";
+}
+
+<div class="row align-items-center mb-4">
+    <div class="col">
+        <h2 class="fw-bold mb-0">Patient Queue</h2>
+        <p class="text-muted small">Daily prioritized appointments.</p>
+    </div>
+    <div class="col-auto">
+        <div class="text-muted small fw-bold">
+            <i class="bi bi-clock me-1"></i>@DateTime.Now.ToString("dd MMM, hh:mm tt")
+        </div>
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success border shadow-sm mb-4">
+        @TempData["Success"]
+    </div>
+}
+
+<div class="card border shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-3 py-3 text-muted fw-bold small">#</th>
+                        <th class="py-3 text-muted fw-bold small">PATIENT</th>
+                        <th class="py-3 text-muted fw-bold small">STATUS</th>
+                        <th class="pe-3 py-3 text-end text-muted fw-bold small">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var entry in Model.OrderBy(x => x.TokenNumber))
+                    {
+                        var isCurrent = entry.Status.ToLower() == "in-progress";
+                        <tr class="@(isCurrent ? "table-primary" : "")">
+                            <td class="ps-3">
+                                <span class="badge @(isCurrent ? "bg-primary" : "bg-secondary") rounded-circle py-2 px-3">
+                                    @entry.TokenNumber
+                                </span>
+                            </td>
+                            <td>
+                                <div class="fw-bold">@entry.PatientName</div>
+                                <div class="text-muted small">ID: #@entry.AppointmentId</div>
+                            </td>
+                            <td>
+                                @{
+                                    var displayStatus = entry.Status.Replace("-", " ").Replace("_", " ");
+                                }
+                                <span class="badge border text-dark bg-light px-2 py-1 text-capitalize">
+                                    @displayStatus
+                                </span>
+                            </td>
+                            <td class="pe-3 text-end">
+                                @{
+                                    var statusLower = entry.Status.ToLower();
+                                    bool canAddRecords = statusLower == "in-progress" || 
+                                                       statusLower == "in_progress" || 
+                                                       statusLower == "done" || 
+                                                       statusLower == "waiting";
+                                }
+                                @if (canAddRecords)
+                                {
+                                    <a asp-action="AddDetails" asp-route-id="@entry.AppointmentId" asp-route-patientName="@entry.PatientName" 
+                                       class="btn btn-sm btn-primary py-1 px-3">
+                                        Add Records
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">
+                                No active patients.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

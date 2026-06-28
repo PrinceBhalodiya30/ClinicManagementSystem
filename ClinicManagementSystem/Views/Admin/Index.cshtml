@@ -1,0 +1,97 @@
+@model ClinicManagementSystem.Models.ClinicInfo
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2 class="fw-bold mb-0">Clinic Overview</h2>
+        <p class="text-muted">Welcome to the @Model.Name administration portal.</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+        <div class="small text-muted fw-bold mb-1 uppercase">CLINIC CODE</div>
+        <div class="h3 fw-bold text-primary mb-0">@Model.Code</div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card border shadow-sm">
+            <div class="card-body">
+                <div class="text-muted small fw-bold mb-2">TOTAL DOCTORS</div>
+                <h2 class="mb-0">@Model.Counts.Doctors</h2>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card border shadow-sm">
+            <div class="card-body">
+                <div class="text-muted small fw-bold mb-2">RECEPTIONISTS</div>
+                <h2 class="mb-0">@Model.Counts.Receptionists</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border shadow-sm">
+            <div class="card-body">
+                <div class="text-muted small fw-bold mb-2">PATIENTS</div>
+                <h2 class="mb-0">@Model.Counts.Patients</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border shadow-sm">
+            <div class="card-body">
+                <div class="text-muted small fw-bold mb-2">TOTAL BOOKINGS</div>
+                <h2 class="mb-0">@Model.Counts.Appointments</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card border shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 py-1">Clinic Information</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table mb-0">
+                    <tr>
+                        <td class="text-muted ps-3" width="30%">Name</td>
+                        <td class="fw-bold">@Model.Name</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted ps-3">Code</td>
+                        <td><span class="badge bg-light text-dark border">@Model.Code</span></td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted ps-3">Established</td>
+                        <td>@Model.CreatedAt.ToShortDateString()</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card border shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 py-1">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-action="CreateUser" class="btn btn-primary">
+                        New User
+                    </a>
+                    <a asp-action="Users" class="btn btn-outline-secondary">
+                        All Users
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

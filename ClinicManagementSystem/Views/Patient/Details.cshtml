@@ -1,0 +1,110 @@
+@model ClinicManagementSystem.Models.Appointment
+@{
+    ViewData["Title"] = "Appointment Details";
+}
+
+<div class="mb-4">
+    <a asp-action="Index" class="text-decoration-none text-muted small">
+        <i class="bi bi-arrow-left me-1"></i>Back
+    </a>
+    <h3 class="fw-bold mt-2">Visit Summary</h3>
+    <p class="text-muted small">
+        @{
+            DateTime visitDate;
+            if (DateTime.TryParse(Model.Date, out visitDate))
+            {
+                @visitDate.ToLongDateString()
+            }
+            else
+            {
+                @Model.Date
+            }
+        }
+    </p>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-8">
+        <div class="card border shadow-sm mb-4">
+            <div class="card-header bg-white pt-3">
+                <h6 class="fw-bold text-primary mb-0">PRESCRIPTION</h6>
+            </div>
+            <div class="card-body">
+                @if (Model.Prescription?.Medicines != null && Model.Prescription.Medicines.Any())
+                {
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted">Medicines</label>
+                        <div class="p-3 bg-light border">
+                            <ul class="mb-0">
+                                @foreach (var m in Model.Prescription.Medicines)
+                                {
+                                    <li><strong>@m.Name</strong> - @m.Dosage (@m.Duration)</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Prescription.Notes))
+                    {
+                        <div>
+                            <label class="form-label fw-bold small text-muted">Notes</label>
+                            <div class="p-3 bg-light border">@Model.Prescription.Notes</div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted py-4 text-center">No prescription found.</p>
+                }
+            </div>
+        </div>
+
+        <div class="card border shadow-sm">
+            <div class="card-header bg-white pt-3">
+                <h6 class="fw-bold text-success mb-0">MEDICAL REPORT</h6>
+            </div>
+            <div class="card-body">
+                @if (Model.Report != null)
+                {
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted">Diagnosis</label>
+                        <p class="fw-bold">@Model.Report.Diagnosis</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted">Tests</label>
+                        <p>@Model.Report.Tests</p>
+                    </div>
+                    <div>
+                        <label class="form-label fw-bold small text-muted">Remarks</label>
+                        <p class="text-muted small">@Model.Report.Remarks</p>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted py-4 text-center">No report found.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border shadow-sm">
+            <div class="card-header bg-white">
+                <h6 class="mb-0 py-1 fw-bold">Appointment Details</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-2">
+                    <div class="small text-muted">Reference ID</div>
+                    <div class="fw-bold">#@Model.Id</div>
+                </div>
+                <div class="mb-2">
+                    <div class="small text-muted">Token</div>
+                    <div class="fw-bold">@Model.QueueEntry?.TokenNumber</div>
+                </div>
+                <div>
+                    <div class="small text-muted">Slot</div>
+                    <div class="fw-bold">@Model.Slot</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

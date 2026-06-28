@@ -1,0 +1,91 @@
+@model List<ClinicManagementSystem.Models.Appointment>
+@{
+    ViewData["Title"] = "My Appointments";
+}
+
+<div class="row align-items-center mb-4">
+    <div class="col">
+        <h2 class="fw-bold mb-0">My Dashboard</h2>
+        <p class="text-muted small">Track your appointments and records.</p>
+    </div>
+    <div class="col-auto">
+        <a asp-action="Book" class="btn btn-primary shadow-sm">
+            <i class="bi bi-calendar-plus me-2"></i>Book Appointment
+        </a>
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success border shadow-sm mb-4">
+        @TempData["Success"]
+    </div>
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="text-center py-5 border bg-white shadow-sm rounded">
+        <div class="mb-3">
+            <i class="bi bi-calendar-x text-muted fs-1"></i>
+        </div>
+        <h5 class="text-secondary">No Appointments Found</h5>
+        <p class="text-muted small">You haven't booked any appointments yet.</p>
+        <a asp-action="Book" class="btn btn-primary mt-2">Book Your First Appointment</a>
+    </div>
+}
+else
+{
+<div class="row g-4">
+    <div class="col-md-8">
+        <h5 class="fw-bold mb-3">Recent Appointments</h5>
+        @foreach (var app in Model.OrderByDescending(x => x.Date))
+        {
+            <div class="card border shadow-sm mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-auto text-center border-end pe-4">
+                            @{
+                                DateTime appDate;
+                                bool isValidDate = DateTime.TryParse(app.Date, out appDate);
+                            }
+                            @if (isValidDate)
+                            {
+                                <div class="fw-bold fs-4">@appDate.Day</div>
+                                <div class="small text-muted text-uppercase">@appDate.ToString("MMM")</div>
+                            }
+                            else
+                            {
+                                <div class="fw-bold fs-4">??</div>
+                                <div class="small text-muted text-uppercase">N/A</div>
+                            }
+                        </div>
+                        <div class="col ps-4">
+                            <div class="d-flex align-items-center mb-1">
+                                <h6 class="fw-bold mb-0 me-3">@app.Slot</h6>
+                                <span class="badge border text-dark bg-light px-2 py-1 text-capitalize">
+                                    @(app.QueueEntry?.Status ?? "Queued")
+                                </span>
+                            </div>
+                            <div class="text-muted small">
+                                Token: <strong>#@app.QueueEntry?.TokenNumber</strong>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            @{
+                                var qStatus = app.QueueEntry?.Status?.ToLower();
+                                bool canView = qStatus == "done" || qStatus == "in-progress" || qStatus == "in_progress";
+                            }
+                            @if (canView)
+                            {
+                                <a asp-action="Details" asp-route-id="@app.Id" class="btn btn-sm btn-outline-primary shadow-sm hover-lift">
+                                    View Records
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+}

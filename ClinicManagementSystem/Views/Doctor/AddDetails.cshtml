@@ -1,0 +1,64 @@
+@model ClinicManagementSystem.Models.Appointment
+@{
+    ViewData["Title"] = "Record Visit Details";
+}
+
+<div class="mb-4">
+    <a asp-action="Index" class="text-decoration-none text-muted small">
+        <i class="bi bi-arrow-left me-1"></i>Back
+    </a>
+    <h3 class="fw-bold mt-2">Patient Records</h3>
+    <p class="text-muted small">Editing records for <span class="fw-bold text-dark">@ViewBag.PatientName</span></p>
+</div>
+
+<form asp-action="AddDetails" method="post">
+    <input type="hidden" name="appointmentId" value="@ViewBag.AppointmentId" />
+    
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card border shadow-sm">
+                <div class="card-header bg-white pt-3">
+                    <h6 class="fw-bold text-primary mb-0">PRESCRIPTION</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Medicines</label>
+                        <textarea name="medicines" class="form-control" rows="4" required>@string.Join("\n", Model.Prescription?.Medicines?.Select(m => m.Name) ?? new List<string>())</textarea>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label small fw-bold">Usage Notes</label>
+                        <textarea name="notes" class="form-control" rows="2">@Model.Prescription?.Notes</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border shadow-sm">
+                <div class="card-header bg-white pt-3">
+                    <h6 class="fw-bold text-success mb-0">MEDICAL REPORT</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Diagnosis</label>
+                        <input name="diagnosis" class="form-control" required value="@Model.Report?.Diagnosis" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Tests</label>
+                        <input name="tests" class="form-control" value="@Model.Report?.Tests" />
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label small fw-bold">Remarks</label>
+                        <textarea name="remarks" class="form-control" rows="2">@Model.Report?.Remarks</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 mt-4 text-center">
+            <button type="submit" class="btn btn-primary px-5 py-2 shadow-sm">
+                Save Records
+            </button>
+        </div>
+    </div>
+</form>

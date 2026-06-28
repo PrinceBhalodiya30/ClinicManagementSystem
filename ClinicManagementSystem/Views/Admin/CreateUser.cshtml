@@ -1,0 +1,65 @@
+@model ClinicManagementSystem.Models.UserInfo
+@{
+    ViewData["Title"] = "Register User";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="mb-4">
+            <a asp-action="Users" class="text-decoration-none text-muted small">
+                <i class="bi bi-arrow-left me-1"></i>Back to Users
+            </a>
+            <h3 class="fw-bold mt-2">New User</h3>
+            <p class="text-muted small">Create a staff or patient account.</p>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger border shadow-sm mb-4">
+                @ViewBag.Error
+            </div>
+        }
+
+        <div class="card border shadow-sm">
+            <div class="card-body p-4">
+                <form asp-action="CreateUser" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Full Name</label>
+                        <input asp-for="Name" class="form-control" placeholder="Full Name" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Email Address</label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="email@gmail.com" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Phone Number</label>
+                        <input asp-for="Phone" type="tel" class="form-control" placeholder="1234567890" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Password</label>
+                        <input name="password" type="password" class="form-control" placeholder="••••••••" required />
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small">Role</label>
+                        <select asp-for="Role" class="form-select" required>
+                            <option value="">Choose...</option>
+                            <option value="Doctor">Doctor</option>
+                            <option value="Receptionist">Receptionist</option>
+                            <option value="Patient">Patient</option>
+                        </select>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary shadow-sm">
+                            Create Account
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
